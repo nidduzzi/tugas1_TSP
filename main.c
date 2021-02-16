@@ -17,7 +17,8 @@ int main() /* Main function. */
     /* Initialize the simulation. */
     initialize();
     /* Run the simulation while more delays are still needed. */
-    while (num_custs_delayed < num_delays_required)
+    // Change simulation end condition to a maximum simuliation time of 2 hours
+    while (sim_time <= 2.0 * 60.0)
     {
         /* Determine the next event. */
         timing();
