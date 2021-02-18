@@ -3,11 +3,12 @@
 #include <stdio.h>
 #include <math.h>
 #include "lcgrand.h" /* Header file for random-number generator. */
-#define Q_LIMIT 100 /* Limit on queue length. */
+// limit di queue menjadi 2
+#define Q_LIMIT 2 /* Limit on queue length. */
 #define BUSY 1 /* Mnemonics for server's being busy */
 #define IDLE 0 /* and idle. */
 int next_event_type, num_custs_delayed, num_delays_required, num_events,
-num_in_q, server_status;
+num_in_q, server_status, num_balked;
 float area_num_in_q, area_server_status, mean_interarrival, mean_service,
 sim_time, time_arrival[Q_LIMIT + 1], time_last_event, time_next_event[3],
 total_of_delays;

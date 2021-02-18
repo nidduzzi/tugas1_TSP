@@ -17,38 +17,23 @@ int main() /* Main function. */
     /* Initialize the simulation. */
     initialize();
     /* Run the simulation while more delays are still needed. */
-    int running = 1;
-    // asumsi mulai pas jam 9
-    while (running)
+    // maximum sim time is 10 minutes
+    while (sim_time <= 10.0)
     {
         /* Determine the next event. */
         timing();
         /* Update time-average statistical accumulators. */
         update_time_avg_stats();
         /* Invoke the appropriate event function. */
-        // operasi normal sebelum jam 17
-        if (sim_time < 8.0 * 60.0)
+        switch (next_event_type)
         {
-            switch (next_event_type)
-            {
-            case 1:
-                arrive();
-                break;
-            case 2:
-                depart();
-                break;
-            }
-        }
-        // setelah jam 17, hanya yang dalam antrian dan sedang dilayani yang terjadi
-        else
-        {
-            // tidak ada yang datang setelah jan 17, dan hanya ada yang pergi
+        case 1:
+            // batasi masuk antrian jika waktu sudah jam 17
+            arrive();
+            break;
+        case 2:
             depart();
-            // cek jika antrian kosong dan tidak ada yang sedang dilayani
-            if (num_in_q == 0 && server_status == IDLE)
-            {
-                running = 0;
-            }
+            break;
         }
     }
     /* Invoke the report generator and end the simulation. */

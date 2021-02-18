@@ -9,6 +9,7 @@ void initialize(void) /* Initialization function. */
     num_in_q = 0;
     time_last_event = 0.0;
     /* Initialize the statistical counters. */
+    num_balked = 0;
     num_custs_delayed = 0;
     total_of_delays = 0.0;
     area_num_in_q = 0.0;
@@ -50,19 +51,24 @@ void arrive(void) /* Arrival event function. */
     /* Check to see whether server is busy. */
     if (server_status == BUSY)
     {
-        /* Server is busy, so increment number of customers in queue. */
-        ++num_in_q;
         /* Check to see whether an overflow condition exists. */
-        if (num_in_q > Q_LIMIT)
+        if ((num_in_q + 1) > Q_LIMIT)
         {
-            /* The queue has overflowed, so stop the simulation. */
-            fprintf(outfile, "\nOverflow of the array time_arrival at");
-            fprintf(outfile, " time %f", sim_time);
-            exit(2);
+            // increment counter for number balked at arrival
+            ++num_balked;
+            // /* The queue has overflowed, so stop the simulation. */
+            // fprintf(outfile, "\nOverflow of the array time_arrival at");
+            // fprintf(outfile, " time %f", sim_time);
+            // exit(2);
         }
-        /* There is still room in the queue, so store the time of arrival of the
-        arriving customer at the (new) end of time_arrival. */
-        time_arrival[num_in_q] = sim_time;
+        else
+        {
+            /* increment number of customers in queue. */
+            ++num_in_q;
+            /* There is still room in the queue, so store the time of arrival of the
+            arriving customer at the (new) end of time_arrival. */
+            time_arrival[num_in_q] = sim_time;
+        }
     }
     else
     {
@@ -118,6 +124,7 @@ void report(void) /* Report generator function. */
             area_num_in_q / sim_time);
     fprintf(outfile, "Server utilization%15.3f\n\n",
             area_server_status / sim_time);
+    fprintf(outfile, "Number of costumers that balked %d\n\n", num_balked);
     fprintf(outfile, "Time simulation ended%12.3f minutes", sim_time);
 }
 
